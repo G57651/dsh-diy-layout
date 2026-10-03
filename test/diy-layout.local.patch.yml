@@ -1,0 +1,4 @@
+# Local --patch overlay for the isolated test run (absolute-path name route).
+- insert:
+    - id: diy-layout
+      name: '/Users/a0629/Documents/deepseek-harness/default-workspace/dsh-diy-layout/lib/index.js'

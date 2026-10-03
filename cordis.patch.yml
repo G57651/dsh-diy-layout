@@ -1,0 +1,5 @@
+# dsh-diy-layout bundle patch: one insert row; the client half registers the
+# settings section, the tooltip overlay, and the injected sidebar stylesheet.
+- insert:
+    - id: diy-layout
+      name: 'dsh-diy-layout'

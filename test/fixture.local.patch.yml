@@ -1,0 +1,4 @@
+# Local --patch overlay mounting the test fixture (absolute-path name route).
+- insert:
+    - id: diy-fixture-panels
+      name: '/Users/a0629/Documents/deepseek-harness/default-workspace/dsh-diy-layout/test/fixture-panels/index.js'

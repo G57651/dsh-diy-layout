@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES2024",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "types": [],
+    "paths": {
+      "@deepseek-ai/cordis": ["/Users/a0629/.npm/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/cordis/lib/types/index.d.ts"],
+      "@deepseek-ai/dsh-client-store": ["/Users/a0629/.npm/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/dsh-client-store/lib/types/index.d.ts"],
+      "@deepseek-ai/dsh-client-ui-slots": ["/Users/a0629/.npm/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/dsh-client-ui-slots/lib/types/index.d.ts"],
+      "@deepseek-ai/dsh-client-ui-primitives": ["/Users/a0629/.npm/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/dsh-client-ui-primitives/lib/types/index.d.ts"],
+      "@deepseek-ai/dsh-client-ui-renderer/client": ["/Users/a0629/.npm/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/dsh-client-ui-renderer/lib/types/client/index.d.ts"],
+      "@deepseek-ai/dsh-client-ui-layout/client": ["/Users/a0629/.npm/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/dsh-client-ui-layout/lib/types/client/index.d.ts"],
+      "@deepseek-ai/dsh-client-ui-settings/client": ["/Users/a0629/.npm/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/dsh-client-ui-settings/lib/types/client/index.d.ts"],
+      "@deepseek-ai/dsh-client-ui-sidebar/client": ["/Users/a0629/.npm/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/dsh-client-ui-sidebar/lib/types/client/index.d.ts"],
+      "@deepseek-ai/dsh-client-locale/client": ["/Users/a0629/.npm/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/dsh-client-locale/lib/types/client/index.d.ts"],
+      "react": ["/Users/a0629/Documents/deepseek-harness/default-workspace/deepseek-harness-src/node_modules/.pnpm/@types+react@18.3.31/node_modules/@types/react/index.d.ts"],
+      "react/jsx-runtime": ["/Users/a0629/Documents/deepseek-harness/default-workspace/deepseek-harness-src/node_modules/.pnpm/@types+react@18.3.31/node_modules/@types/react/jsx-runtime.d.ts"],
+      "react-dom": ["/Users/a0629/Documents/deepseek-harness/default-workspace/deepseek-harness-src/node_modules/.pnpm/@types+react-dom@18.3.7_@types+react@18.3.31/node_modules/@types/react-dom/index.d.ts"]
+    }
+  },
+  "include": ["src"]
+}
