@@ -1,0 +1,10 @@
+# Mount the user's real footer plugins (absolute-path route) for compatibility testing.
+- insert:
+    - id: one-click-restart
+      name: '/Users/a0629/.dsh/profiles/desktop/node_modules/@dsh-restart/one-click-restart/lib/index.js'
+- insert:
+    - id: import-claude
+      name: '/Users/a0629/.dsh/profiles/desktop/node_modules/dsh-chat-import/lib/index.mjs'
+- insert:
+    - id: dsh-context
+      name: '/Users/a0629/.dsh/profiles/desktop/node_modules/dsh-context/lib/index.js'

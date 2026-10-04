@@ -1,6 +1,6 @@
 {
   "name": "dsh-diy-layout",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "DIY Layout for the DSH home sidebar — one/two-column panel list, icon-only mode with hover tooltips, per-plugin ordering, hiding, and a settings page. Pure add-on: no DSH source changes.",
   "private": true,
   "type": "module",

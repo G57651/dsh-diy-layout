@@ -1,24 +1,34 @@
 /**
  * Icon-only hover tooltip. Registered into the additive `shell.overlay` list
  * slot; the component itself renders nothing into the sidebar — it watches
- * panel-row hover/focus events at the document level and portals one bubble
- * to document.body.
+ * plugin-entry hover/focus events at the document level and portals one
+ * bubble to document.body.
  *
  * Why not the ui-primitives `Tooltip`: that component must own its anchor
- * element (it clones and wraps the child), while the anchor here — the
- * panel-row button — is rendered by ui-sidebar's shell. The bubble instead
- * copies the primitive's CSS values 1:1 (see styles.ts), so it stays
- * visually identical and theme-following.
+ * element (it clones and wraps the child), while the anchors here — the
+ * panel-row buttons and the footer plugin buttons — are rendered by the
+ * shell and by third-party plugins. The bubble instead copies the
+ * primitive's CSS values 1:1 (see styles.ts), so it stays visually
+ * identical and theme-following.
  *
- * Trigger contract matches the shell's own PanelRow tooltip: 500ms hover
- * delay, immediate on keyboard focus, hidden on click. Rail rows (collapsed
- * sidebar) have no label span and stay covered by the shell's tooltip — the
- * overlay only covers rows whose label span the injected stylesheet hides.
+ * Coverage:
+ * - Panel rows (global panel list): the shell's own tooltip is disabled
+ *   while expanded, so the overlay covers rows whose label span the
+ *   injected stylesheet hides.
+ * - Footer plugin entries (chat-import, one-click-restart, …): covered when
+ *   the injected icon-only rules are active on them (computed font-size 0),
+ *   unless the entry carries its own `title` attribute — those get a native
+ *   tooltip by the plugin's own design and are skipped to avoid doubles.
+ * - Collapsed rail rows keep their shipped tooltips (shell for panel rows,
+ *   plugins' own mechanisms for footer entries).
+ *
+ * Trigger contract matches the shell's PanelRow tooltip: 500ms hover delay,
+ * immediate on keyboard focus, hidden on click.
  */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { PropsStore } from '@deepseek-ai/dsh-client-store'
-import { NAV_SELECTOR, TITLE_SELECTOR } from './sidebar-css.ts'
+import { FOOTER_ROW_SELECTOR, NAV_SELECTOR, TITLE_SELECTOR } from './sidebar-css.ts'
 import type { DiyLayoutStoreHandle } from './store.ts'
 
 /** Hover delay, matching the shell's PanelRow `Tooltip delayMs={500}`. */
@@ -39,7 +49,7 @@ type Tip = {
 type OverlayProps = PropsStore<DiyLayoutStoreHandle>
 
 /** A panel row the overlay should cover, or null. */
-function coveredRow(target: EventTarget | null): HTMLButtonElement | null {
+function coveredPanelRow(target: EventTarget | null): HTMLButtonElement | null {
   const candidate = target instanceof Element ? target.closest('button') : null
   if (!(candidate instanceof HTMLButtonElement)) return null
   if (candidate.closest(NAV_SELECTOR) === null) return null
@@ -52,11 +62,31 @@ function coveredRow(target: EventTarget | null): HTMLButtonElement | null {
 }
 
 /**
+ * A footer plugin entry the overlay should cover, or null. Active only while
+ * the injected icon-only rules are actually applied to it (font-size 0);
+ * entries that ship their own `title` tooltip keep theirs.
+ */
+function coveredFooterButton(target: EventTarget | null): HTMLButtonElement | null {
+  const candidate = target instanceof Element ? target.closest('button') : null
+  if (!(candidate instanceof HTMLButtonElement)) return null
+  if (candidate.closest(FOOTER_ROW_SELECTOR) === null) return null
+  if (candidate.getAttribute('title') !== null) return null
+  const label = candidate.getAttribute('aria-label')
+  if (label === null || label === '') return null
+  return window.getComputedStyle(candidate).fontSize === '0px' ? candidate : null
+}
+
+/** Any covered plugin entry (panel row or footer button), or null. */
+function coveredEntry(target: EventTarget | null): HTMLButtonElement | null {
+  return coveredPanelRow(target) ?? coveredFooterButton(target)
+}
+
+/**
  * Render the hover tooltip. Inert (renders null, mounts no listeners) unless
- * the user picked icon-only display.
+ * an icon-only display is configured for at least one area.
  */
 export function DiyTooltipOverlay({ useStore }: OverlayProps) {
-  const iconOnly = useStore(state => state.nameDisplay === 'icon-only')
+  const iconOnly = useStore(state => state.nameDisplay === 'icon-only' || state.footerNameDisplay === 'icon-only')
   const [tip, setTip] = useState<Tip | null>(null)
   const bubbleRef = useRef<HTMLDivElement | null>(null)
 
@@ -88,25 +118,25 @@ export function DiyTooltipOverlay({ useStore }: OverlayProps) {
       else present()
     }
     const onOver = (event: PointerEvent): void => {
-      const row = coveredRow(event.target)
-      if (row === anchor) return
-      if (row === null) { hide(); return }
-      show(row, true)
+      const entry = coveredEntry(event.target)
+      if (entry === anchor) return
+      if (entry === null) { hide(); return }
+      show(entry, true)
     }
     const onOut = (event: PointerEvent): void => {
       // Leaving the window (relatedTarget null) or moving to a non-covered
       // target both end the hover; the next pointerover re-arms otherwise.
       if (anchor === null) return
-      if (event.relatedTarget === null || coveredRow(event.relatedTarget) !== anchor) hide()
+      if (event.relatedTarget === null || coveredEntry(event.relatedTarget) !== anchor) hide()
     }
     const onFocusIn = (event: FocusEvent): void => {
-      const row = coveredRow(event.target)
-      if (row !== null) show(row, false)
+      const entry = coveredEntry(event.target)
+      if (entry !== null) show(entry, false)
       else hide()
     }
-    // Clicks select the panel; the primitive hides its bubble there too.
+    // Clicks activate the entry; the primitive hides its bubble there too.
     const onPointerDown = (event: PointerEvent): void => {
-      if (coveredRow(event.target) !== null) hide()
+      if (coveredEntry(event.target) !== null) hide()
     }
     // Geometry changes strand the bubble away from its anchor.
     const onGeometry = (): void => { if (anchor !== null) hide() }
