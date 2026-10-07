@@ -29,7 +29,7 @@
 
 ```sh
 dsh plugin --profile <你的 profile> add \
-  https://github.com/G57651/dsh-diy-layout/releases/latest/download/dsh-diy-layout-0.1.0.tgz
+  https://github.com/G57651/dsh-diy-layout/releases/download/v0.2.0/dsh-diy-layout-0.2.0.tgz
 # 例如桌面版：dsh plugin --profile desktop add <上面的 URL>（或经应用内插件管理器安装）
 ```
 
